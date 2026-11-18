@@ -1,0 +1,6 @@
+{
+  "name": "QuizArena",
+  "description": "Competitive multiplayer trivia & tournament arena with AI-generated random quizzes, global leaderboards, points shop, friends, and chat.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

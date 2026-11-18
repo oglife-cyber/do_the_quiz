@@ -1,0 +1,285 @@
+{
+  "entities": {
+    "PublicProfile": {
+      "title": "PublicProfile",
+      "description": "Public competitive trivia profile without PII, used for leaderboards, friend discovery, online status, cosmetics, and level progression.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID of the player." },
+        "username": { "type": "string", "description": "Unique lowercase handle set by the player." },
+        "displayName": { "type": "string", "description": "Player display name." },
+        "discoverable": { "type": "boolean", "description": "Whether the player appears in leaderboard and friend search." },
+        "online": { "type": "boolean", "description": "Current online availability flag." },
+        "points": { "type": "integer", "description": "Spendable arena points balance." },
+        "xp": { "type": "integer", "description": "Total experience points determining rank level." },
+        "level": { "type": "integer", "description": "Current player level derived from XP." },
+        "matchesPlayed": { "type": "integer", "description": "Total completed quizzes and matches." },
+        "wins": { "type": "integer", "description": "Total multiplayer and tournament wins." },
+        "correctAnswers": { "type": "integer", "description": "Lifetime correct answers." },
+        "totalAnswered": { "type": "integer", "description": "Lifetime questions answered." },
+        "winStreak": { "type": "integer", "description": "Current winning streak." },
+        "tournamentsWon": { "type": "integer", "description": "Total tournaments won." },
+        "equippedFrame": { "type": "string", "description": "Equipped profile frame item ID." },
+        "equippedTitle": { "type": "string", "description": "Equipped title badge." },
+        "ownedItems": { "type": "array", "description": "List of owned shop cosmetic IDs." },
+        "hintPowerUps": { "type": "integer", "description": "Count of 50/50 hint power-ups." },
+        "freezePowerUps": { "type": "integer", "description": "Count of time-freeze power-ups." },
+        "doubleXpPowerUps": { "type": "integer", "description": "Count of double-XP power-ups." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["userId", "username", "displayName", "discoverable", "online", "points", "xp", "level", "createdAt", "updatedAt"]
+    },
+    "PrivateAccount": {
+      "title": "PrivateAccount",
+      "description": "Owner-only private account settings including optional wallet passcode hash.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" },
+        "passcodeEnabled": { "type": "boolean" },
+        "passcodeHash": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "passcodeEnabled", "createdAt", "updatedAt"]
+    },
+    "MatchHistoryEntry": {
+      "title": "MatchHistoryEntry",
+      "description": "Completed solo, random AI, live multiplayer, or tournament match log.",
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["random_ai", "live_match", "tournament"] },
+        "title": { "type": "string" },
+        "topic": { "type": "string" },
+        "correctCount": { "type": "integer" },
+        "totalQuestions": { "type": "integer" },
+        "pointsEarned": { "type": "integer" },
+        "xpEarned": { "type": "integer" },
+        "won": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["mode", "title", "topic", "correctCount", "totalQuestions", "pointsEarned", "xpEarned", "won", "createdAt"]
+    },
+    "PointTransaction": {
+      "title": "PointTransaction",
+      "description": "Immutable points wallet ledger entry.",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["quiz_reward", "shop_purchase", "tournament_entry", "tournament_prize", "friend_gift_sent", "friend_gift_received"] },
+        "amount": { "type": "integer" },
+        "balanceAfter": { "type": "integer" },
+        "description": { "type": "string" },
+        "counterpartyName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["type", "amount", "balanceAfter", "description", "createdAt"]
+    },
+    "MatchRoom": {
+      "title": "MatchRoom",
+      "description": "Live multiplayer trivia room where real users compete.",
+      "type": "object",
+      "properties": {
+        "hostId": { "type": "string" },
+        "hostName": { "type": "string" },
+        "title": { "type": "string" },
+        "topic": { "type": "string" },
+        "status": { "type": "string", "enum": ["waiting", "active", "completed"] },
+        "isPublic": { "type": "boolean" },
+        "maxPlayers": { "type": "integer" },
+        "playerCount": { "type": "integer" },
+        "memberUids": { "type": "array" },
+        "questions": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["hostId", "hostName", "title", "topic", "status", "isPublic", "maxPlayers", "playerCount", "memberUids", "questions", "createdAt", "updatedAt"]
+    },
+    "MatchPlayer": {
+      "title": "MatchPlayer",
+      "description": "Live score and progress of a player inside a match room.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "username": { "type": "string" },
+        "score": { "type": "integer" },
+        "correctCount": { "type": "integer" },
+        "answeredCount": { "type": "integer" },
+        "finished": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "username", "score", "correctCount", "answeredCount", "finished", "updatedAt"]
+    },
+    "Tournament": {
+      "title": "Tournament",
+      "description": "Host-created trivia tournament with custom questions, entry fee, prize pool, and invite scope.",
+      "type": "object",
+      "properties": {
+        "hostId": { "type": "string" },
+        "hostName": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "entryFee": { "type": "integer" },
+        "prizePool": { "type": "integer" },
+        "maxPlayers": { "type": "integer" },
+        "participantCount": { "type": "integer" },
+        "inviteScope": { "type": "string", "enum": ["friends", "online_all"] },
+        "status": { "type": "string", "enum": ["open", "live", "completed"] },
+        "isPublic": { "type": "boolean" },
+        "memberUids": { "type": "array" },
+        "questions": { "type": "array" },
+        "winnerUid": { "type": "string" },
+        "winnerName": { "type": "string" },
+        "prizeClaimed": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["hostId", "hostName", "title", "category", "entryFee", "prizePool", "maxPlayers", "participantCount", "inviteScope", "status", "isPublic", "memberUids", "questions", "prizeClaimed", "createdAt", "updatedAt"]
+    },
+    "TournamentParticipant": {
+      "title": "TournamentParticipant",
+      "description": "Participant score and submission inside a tournament.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "username": { "type": "string" },
+        "score": { "type": "integer" },
+        "correctCount": { "type": "integer" },
+        "finished": { "type": "boolean" },
+        "joinedAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "username", "score", "correctCount", "finished", "joinedAt", "updatedAt"]
+    },
+    "TournamentInvite": {
+      "title": "TournamentInvite",
+      "description": "Invitation sent to specific friends or broadcast to all online users.",
+      "type": "object",
+      "properties": {
+        "tournamentId": { "type": "string" },
+        "tournamentTitle": { "type": "string" },
+        "hostId": { "type": "string" },
+        "hostName": { "type": "string" },
+        "entryFee": { "type": "integer" },
+        "targetUid": { "type": "string" },
+        "inviteType": { "type": "string", "enum": ["direct", "broadcast_online"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["tournamentId", "tournamentTitle", "hostId", "hostName", "entryFee", "targetUid", "inviteType", "createdAt"]
+    },
+    "FriendRequest": {
+      "title": "FriendRequest",
+      "description": "Friend request between two arena players.",
+      "type": "object",
+      "properties": {
+        "fromUid": { "type": "string" },
+        "fromUsername": { "type": "string" },
+        "toUid": { "type": "string" },
+        "toUsername": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fromUid", "fromUsername", "toUid", "toUsername", "status", "createdAt", "updatedAt"]
+    },
+    "Friendship": {
+      "title": "Friendship",
+      "description": "Confirmed mutual friendship enabling direct chat and point transfers.",
+      "type": "object",
+      "properties": {
+        "memberUids": { "type": "array" },
+        "user1Uid": { "type": "string" },
+        "user1Name": { "type": "string" },
+        "user2Uid": { "type": "string" },
+        "user2Name": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["memberUids", "user1Uid", "user1Name", "user2Uid", "user2Name", "createdAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Direct message between accepted friends.",
+      "type": "object",
+      "properties": {
+        "senderUid": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderUid", "senderName", "text", "memberUids", "createdAt"]
+    },
+    "FriendGift": {
+      "title": "FriendGift",
+      "description": "Points transfer sent from one friend to another, claimable by the recipient.",
+      "type": "object",
+      "properties": {
+        "fromUid": { "type": "string" },
+        "fromUsername": { "type": "string" },
+        "toUid": { "type": "string" },
+        "toUsername": { "type": "string" },
+        "friendshipId": { "type": "string" },
+        "amount": { "type": "integer" },
+        "note": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "claimed"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fromUid", "fromUsername", "toUid", "toUsername", "friendshipId", "amount", "status", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/public_profiles/{userId}": {
+      "schema": { "$ref": "#/entities/PublicProfile" },
+      "description": "Public player leaderboard & social profiles."
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/PrivateAccount" },
+      "description": "Owner-only PII & passcode settings."
+    },
+    "/users/{userId}/match_history/{matchId}": {
+      "schema": { "$ref": "#/entities/MatchHistoryEntry" },
+      "description": "Owner-only match history entries."
+    },
+    "/users/{userId}/transactions/{txId}": {
+      "schema": { "$ref": "#/entities/PointTransaction" },
+      "description": "Owner-only points wallet transaction ledger."
+    },
+    "/match_rooms/{roomId}": {
+      "schema": { "$ref": "#/entities/MatchRoom" },
+      "description": "Live multiplayer trivia challenge rooms."
+    },
+    "/match_rooms/{roomId}/players/{playerId}": {
+      "schema": { "$ref": "#/entities/MatchPlayer" },
+      "description": "Live scores for participants in a match room."
+    },
+    "/tournaments/{tournamentId}": {
+      "schema": { "$ref": "#/entities/Tournament" },
+      "description": "Host-created trivia tournaments with entry fees and custom questions."
+    },
+    "/tournaments/{tournamentId}/participants/{participantId}": {
+      "schema": { "$ref": "#/entities/TournamentParticipant" },
+      "description": "Scores for participants in a tournament."
+    },
+    "/tournament_invites/{inviteId}": {
+      "schema": { "$ref": "#/entities/TournamentInvite" },
+      "description": "Direct friend invites and online-user broadcast invites."
+    },
+    "/friend_requests/{requestId}": {
+      "schema": { "$ref": "#/entities/FriendRequest" },
+      "description": "Pending and resolved friend requests."
+    },
+    "/friendships/{friendshipId}": {
+      "schema": { "$ref": "#/entities/Friendship" },
+      "description": "Mutual friendships enabling messaging and point gifts."
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "1-on-1 direct chat messages between accepted friends."
+    },
+    "/friend_gifts/{giftId}": {
+      "schema": { "$ref": "#/entities/FriendGift" },
+      "description": "Claimable point transfers between friends."
+    }
+  }
+}

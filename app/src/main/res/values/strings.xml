@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">QuizArena</string>
+    <string name="sign_in_google">Sign in with Google</string>
+    <string name="arena_tagline">Compete live. Climb ranks. Win rewards.</string>
+    <string name="nav_arena">Arena</string>
+    <string name="nav_tournaments">Tournaments</string>
+    <string name="nav_social">Social</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_help">Help</string>
+    <string name="cd_hero_banner">QuizArena futuristic arena banner</string>
+    <string name="cd_tournament_banner">Tournament championship trophy banner</string>
+    <string name="cd_social_empty">Friends and chat illustration</string>
+    <string name="cd_back">Navigate back</string>
+    <string name="cd_shop">Open points shop</string>
+    <string name="cd_wallet">Open wallet and transactions</string>
+    <string name="cd_send_message">Send message</string>
+</resources>
